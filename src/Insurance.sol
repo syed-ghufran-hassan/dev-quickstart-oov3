@@ -61,6 +61,9 @@ contract Insurance {
     }
 
     function requestPayout(bytes32 policyId) public returns (bytes32 assertionId) {
+        require(defaultCurrency.balanceOf(msg.sender) >= bond, "Insufficient balance for bond");
+        require(defaultCurrency.allowance(msg.sender, address(this)) >= bond, "Insufficient allowance for bond");
+
         require(policies[policyId].payoutAddress != address(0), "Policy does not exist");
         uint256 bond = oo.getMinimumBond(address(defaultCurrency));
         defaultCurrency.safeTransferFrom(msg.sender, address(this), bond);

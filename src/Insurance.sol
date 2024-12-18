@@ -48,6 +48,7 @@ contract Insurance {
         address payoutAddress,
         bytes memory insuredEvent
     ) public returns (bytes32 policyId) {
+        require(insuredEvent.length > 0, "Insured event cannot be empty");
         policyId = keccak256(abi.encode(insuredEvent, payoutAddress));
         require(policies[policyId].payoutAddress == address(0), "Policy already exists");
         policies[policyId] = Policy({
